@@ -7,6 +7,8 @@ abstract class Particle{
     pos = new PVector();
     pos.x = random(width);
     pos.y = random(height);
+    
+    myColor = color(random(155) + 100, random(155) + 100, random(155) + 100);
   }
   
   public void update(){
@@ -42,4 +44,5 @@ abstract class Particle{
   private PVector g = new PVector(0, 0.1);
  
   private float friction;
+  protected color myColor;
 }

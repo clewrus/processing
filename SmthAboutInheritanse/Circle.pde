@@ -5,6 +5,7 @@ class Circle extends Particle{
   }
   
   public void show(){
+    fill(myColor);
     ellipse(pos.x, pos.y, 50, 50);
   }
   

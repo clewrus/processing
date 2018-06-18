@@ -9,6 +9,7 @@ class Rectangle extends Particle{
   }
   
   public void show(){
+    fill(myColor);
     rect(pos.x, pos.y, 20, 20);
   }
 }
