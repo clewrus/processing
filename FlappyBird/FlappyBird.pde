@@ -47,6 +47,8 @@ void draw(){
 }
 
 void handleCollision(Element el){
+  fill(255, 0, 0);
+  ((Tube)el).show();
   endGame();
 }
 
