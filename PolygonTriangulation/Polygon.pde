@@ -81,7 +81,14 @@ class Polygon{
     NamedDot d3 = (NamedDot)curDot.next();
 
     initialDirection = sign(getDotOrientation(d1, d3, d2));
+    while(initialDirection == 0){   
+      d1 = d2;
+      d2 = d3;
+      d3 = (NamedDot)curDot.next();
+      initialDirection = sign(getDotOrientation(d1, d3, d2));
+    }
     boolean finish = false;
+    println("init dir", initialDirection);
     
     while(!finish){
       if(!curDot.hasNext()){
@@ -90,23 +97,30 @@ class Polygon{
       d1 = d2;
       d2 = d3;
       d3 = (NamedDot)curDot.next();
-      int curDirection = sign(getDotOrientation(d1, d3, d2));
-      if(curDirection != initialDirection){
+      
+      if(! compareDirection(d1, d3, d2)){
         breakPoints[d2.name()] = true;
       }
     }
   }
   
+  private boolean compareDirection(NamedDot d1, NamedDot d2, NamedDot d3){
+    int orientation = sign(getDotOrientation(d1, d2, d3));
+    return orientation == initialDirection || orientation == 0;
+  }
+  
   private void handleSidePoints(DoubleLinkedList breakList, DoubleLinkedList.ListNode[] breakListMap, NamedDot d1, NamedDot d2, NamedDot d3){
-    if(sign(getDotOrientation(d1, d2, d3)) != initialDirection){
+    if(compareDirection(d1, d2, d3)){
+      if(breakListMap[d3.name()] != null){
+        breakPoints[d3.name()] = false;
+        breakList.removeNode(breakListMap[d3.name()]);
+        breakListMap[d3.name()] = null;
+      }
+    } else {
       if(breakListMap[d3.name()] == null){
         breakPoints[d3.name()] = true;
         breakListMap[d3.name()] = breakList.addLast(new NamedDot(d3, d3.name()));
       }
-    } else if(breakListMap[d3.name()] != null){
-      breakPoints[d3.name()] = false;
-      breakList.removeNode(breakListMap[d3.name()]);
-      breakListMap[d3.name()] = null;
     }
   }
   
@@ -178,8 +192,10 @@ class Polygon{
           curDot.remove();                           // removing the ear
           curDot.next();                             // curDot is in its initial state
           
-          handleSidePoints(breakList, breakListMap, d0, d3, d1);
-          handleSidePoints(breakList, breakListMap, d1, d4, d3);
+          if(trianglesLeft > 0){
+            handleSidePoints(breakList, breakListMap, d0, d3, d1);
+            handleSidePoints(breakList, breakListMap, d1, d4, d3);
+          }
         }
       }
       showDebugInfo(breakList, d1, d2, d3, delAtCurOperation);

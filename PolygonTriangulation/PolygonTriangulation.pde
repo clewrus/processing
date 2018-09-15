@@ -10,6 +10,7 @@ void setup(){
 
 void draw(){
   background(180);
+  
   if(showingTheResult){
     //myPolygon.show();
     myPolygon.showTrigs();
